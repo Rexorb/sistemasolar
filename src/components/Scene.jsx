@@ -15,8 +15,8 @@ function Orbit({ sunPosition, distance }) {
   return (
     <group ref={ref} position={sunPosition}>
       <mesh>
-        <ringGeometry args={[distance - 0.1, distance, 64]} />
-        <meshBasicMaterial color="red" side={THREE.DoubleSide} />
+        
+        
       </mesh>
     </group>
   );

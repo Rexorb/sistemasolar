@@ -9,7 +9,7 @@ function Sun({ setSunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const scale = 0.5 + Math.sin(elapsed * 2) * 0.05;
+    const scale = 5 + Math.sin(elapsed * 2) * 0.05;
     meshRef.current.scale.set(scale, scale, scale);
 
     // Define a posição do Sol
@@ -17,7 +17,7 @@ function Sun({ setSunPosition }) {
     setSunPosition(sunPosition);
   });
 
-  return <primitive ref={meshRef} object={scene} />;
+  return <primitive ref={meshRef} object={scene}   />;
 }
 
 // Mercúrio
@@ -27,8 +27,8 @@ function Mercury({ sunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 20;
-    const speed = 4.15;
+    const distance = 150;
+    const speed = 2.0;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
@@ -44,31 +44,31 @@ function Venus({ sunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 40;
-    const speed = 3.0;
+    const distance = 180;
+    const speed = 1.7;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.5, 0.5, 0.5]} />;
+  return <primitive ref={meshRef} object={scene} scale={[0.8, 0.8, 0.8]} />;
 }
 
 // Terra
 function Earth({ sunPosition }) {
-  const { scene } = useGLTF('/Earth/scene_earth.gltf');
+  const { scene } = useGLTF('/Earth/Planet_Earth.gltf');
   const meshRef = useRef();
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 45;
-    const speed = 2.6;
+    const distance = 210;
+    const speed = 0.8;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.07, 0.07, 0.07]} />;
+  return <primitive ref={meshRef} object={scene} scale={[15, 15, 15]} />;
 }
 
 // Marte
@@ -78,14 +78,14 @@ function Mars({ sunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 50;
-    const speed = 2.0;
+    const distance = 250;
+    const speed = 0.5;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.5, 0.5, 0.5]} />;
+  return <primitive ref={meshRef} object={scene} scale={[0.7, 0.7, 0.7]} />;
 }
 
 // Júpiter
@@ -95,48 +95,48 @@ function Jupiter({ sunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 62;
-    const speed = 1.5;
+    const distance = 300;
+    const speed = 0.2;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.05, 0.05, 0.05]} />;
+  return <primitive ref={meshRef} object={scene} scale={[0.35, 0.35, 0.35]} />;
 }
 
 // Saturno
 function Saturn({ sunPosition }) {
-  const { scene } = useGLTF('/Saturn/scene_saturn.gltf');
+  const { scene } = useGLTF('/Saturn/Planet_Saturn.gltf');
   const meshRef = useRef();
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 72.2;
-    const speed = 1.2;
+    const distance = 400;
+    const speed = 0.1;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.5, 0.5, 0.5]} />;
+  return <primitive ref={meshRef} object={scene} scale={[35, 35, 35]} />;
 }
 
 // Urano
 function Uranus({ sunPosition }) {
-  const { scene } = useGLTF('/Uranus/scene_uranus.gltf');
+  const { scene } = useGLTF('/Uranus/Planet_Uranus.gltf');
   const meshRef = useRef();
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 78;
-    const speed = 1.0;
-
+    const distance = 430;
+    const speed = 0.05;
+    //meshRef.current.position.y = sunPosition.y + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.02, 0.02, 0.02]} />;
+  return <primitive ref={meshRef} object={scene} scale={[25, 25, 25]} />;
 }
 
 // Netuno
@@ -146,14 +146,14 @@ function Neptune({ sunPosition }) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const distance = 99;
-    const speed = 0.8;
+    const distance = 30;
+    const speed = 0.05;
 
     meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
     meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
   });
 
-  return <primitive ref={meshRef} object={scene} scale={[0.05, 0.05, 0.05]} />;
+  return <primitive ref={meshRef} object={scene} scale={[10, 10, 10]} />;
 }
 
 export { Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune };
