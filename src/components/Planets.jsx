@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, OrbitControls } from "@react-three/drei";
 
 // Sol
 function Sun({ setSunPosition }) {
@@ -11,149 +11,174 @@ function Sun({ setSunPosition }) {
     const elapsed = clock.getElapsedTime();
     const scale = 5 + Math.sin(elapsed * 2) * 0.05;
     meshRef.current.scale.set(scale, scale, scale);
-
-    // Define a posição do Sol
     const sunPosition = meshRef.current.position;
     setSunPosition(sunPosition);
   });
 
-  return <primitive ref={meshRef} object={scene}   />;
+  return <primitive ref={meshRef} object={scene} />;
+}
+
+// Função genérica para planetas
+function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPaused, isFocused }) {
+  const { scene } = useGLTF(modelPath);
+  const meshRef = useRef();
+
+  useFrame(({ clock }) => {
+    if (isPaused) return; // Pausa a rotação se isPaused for true
+    const elapsed = clock.getElapsedTime();
+    if (meshRef.current && sunPosition) {
+      meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
+      meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
+    }
+  });
+
+  return (
+    <>
+      <primitive
+        ref={meshRef}
+        object={scene}
+        scale={scale}
+        onClick={() => onClick(meshRef.current.position)} // Retorna a posição ao clicar
+      />
+      {isFocused && (
+        <OrbitControls
+          enablePan={false}
+          maxPolarAngle={Math.PI * 2}
+          minDistance={10}
+          maxDistance={50}
+          target={meshRef.current.position} // Centraliza o controle no planeta
+        />
+      )}
+    </>
+  );
 }
 
 // Mercúrio
-function Mercury({ sunPosition }) {
-  const { scene } = useGLTF('/Mercury/scene_mercury.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 150;
-    const speed = 2.0;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[0.5, 0.5, 0.5]} />;
+function Mercury({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Mercury/scene_mercury.gltf"
+      distance={150}
+      speed={2.0}
+      scale={[0.5, 0.5, 0.5]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Vênus
-function Venus({ sunPosition }) {
-  const { scene } = useGLTF('/Venus/scene_venus.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 180;
-    const speed = 1.7;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[0.8, 0.8, 0.8]} />;
+function Venus({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Venus/scene_venus.gltf"
+      distance={180}
+      speed={1.7}
+      scale={[0.8, 0.8, 0.8]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Terra
-function Earth({ sunPosition }) {
-  const { scene } = useGLTF('/Earth/Planet_Earth.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 210;
-    const speed = 0.8;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[15, 15, 15]} />;
+function Earth({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Earth/Planet_Earth.gltf"
+      distance={210}
+      speed={0.8}
+      scale={[15, 15, 15]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Marte
-function Mars({ sunPosition }) {
-  const { scene } = useGLTF('/Mars/scene_mars.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 250;
-    const speed = 0.5;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[0.7, 0.7, 0.7]} />;
+function Mars({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Mars/scene_mars.gltf"
+      distance={250}
+      speed={0.5}
+      scale={[0.7, 0.7, 0.7]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Júpiter
-function Jupiter({ sunPosition }) {
-  const { scene } = useGLTF('/Jupiter/scene_jupiter.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 300;
-    const speed = 0.2;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[0.35, 0.35, 0.35]} />;
+function Jupiter({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Jupiter/scene_jupiter.gltf"
+      distance={300}
+      speed={0.2}
+      scale={[0.35, 0.35, 0.35]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Saturno
-function Saturn({ sunPosition }) {
-  const { scene } = useGLTF('/Saturn/Planet_Saturn.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 400;
-    const speed = 0.1;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[35, 35, 35]} />;
+function Saturn({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Saturn/Planet_Saturn.gltf"
+      distance={400}
+      speed={0.1}
+      scale={[35, 35, 35]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Urano
-function Uranus({ sunPosition }) {
-  const { scene } = useGLTF('/Uranus/Planet_Uranus.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 430;
-    const speed = 0.05;
-    //meshRef.current.position.y = sunPosition.y + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[25, 25, 25]} />;
+function Uranus({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Uranus/Planet_Uranus.gltf"
+      distance={430}
+      speed={0.05}
+      scale={[25, 25, 25]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 // Netuno
-function Neptune({ sunPosition }) {
-  const { scene } = useGLTF('/Neptune/scene_neptune.gltf');
-  const meshRef = useRef();
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime();
-    const distance = 30;
-    const speed = 0.05;
-
-    meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-    meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
-  });
-
-  return <primitive ref={meshRef} object={scene} scale={[10, 10, 10]} />;
+function Neptune({ sunPosition, onClick, isPaused, isFocused }) {
+  return (
+    <Planet
+      sunPosition={sunPosition}
+      modelPath="/Neptune/scene_neptune.gltf"
+      distance={470}
+      speed={0.05}
+      scale={[10, 10, 10]}
+      onClick={onClick}
+      isPaused={isPaused}
+      isFocused={isFocused}
+    />
+  );
 }
 
 export { Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune };
