@@ -1,6 +1,8 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+button{
+  position: "absolute";
+  top: "20px";
+  left: "20px";
+  zIndex: 1;
+  padding: "10px";
+  fontSize: "16px";
 }

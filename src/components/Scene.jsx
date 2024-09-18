@@ -34,6 +34,7 @@ function Scene() {
     setIsPaused(false); // Retoma a rotação dos planetas
     setSelectedPlanet(null); // Limpa o estado do planeta selecionado
   };
+  
 
   return (
     <>
@@ -94,7 +95,8 @@ function Scene() {
         />
 
         {/* Controlador de câmera */}
-        <CameraController focusedPlanet={focusedPlanet} />
+        <CameraController focusedPlanet={focusedPlanet} planetName={selectedPlanet} />
+
 
         {/* Controle de órbita geral */}
         <OrbitControls
@@ -104,6 +106,7 @@ function Scene() {
           enablePan={false}
         />
       </Canvas>
+    
 
       {/* Botão de reset */}
       {focusedPlanet && (

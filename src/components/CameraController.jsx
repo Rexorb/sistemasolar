@@ -1,34 +1,32 @@
-import { useFrame, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-import { OrbitControls } from '@react-three/drei';
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
 
-function CameraController({ focusedPlanet }) {
+function CameraController({ focusedPlanet, planetName }) {
   const { camera } = useThree();
 
   useFrame(() => {
     if (focusedPlanet) {
-      camera.position.lerp(
-        new THREE.Vector3(focusedPlanet.x, focusedPlanet.y + 50, focusedPlanet.z + 100),
-        0.05
-      );
+      if (planetName === "Jupiter") {
+        camera.position.lerp(
+          new THREE.Vector3(
+            focusedPlanet.x,
+            focusedPlanet.y + 50,
+            focusedPlanet.z + 490 // Aumente a distância da câmera
+          ),
+          0
+        );
+      } else {
+        camera.position.lerp(
+          new THREE.Vector3(
+            focusedPlanet.x,
+            focusedPlanet.y + 50,
+            focusedPlanet.z + 100
+          ),
+          0
+        );
+      }
       camera.lookAt(focusedPlanet);
-      return (
-         <button
-          style={{
-            position: "absolute",
-            top: "20px",
-            left: "20px",
-            zIndex: 1,
-            padding: "10px",
-            fontSize: "16px",
-          }}
-          
-        >
-          Voltar
-        </button>
-          )
     }
-
   });
 
   return null;

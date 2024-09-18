@@ -2,6 +2,9 @@ import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 
+
+
+
 // Sol
 function Sun({ setSunPosition }) {
   const { scene } = useGLTF('/Sun/scene.gltf');
@@ -27,10 +30,18 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
     if (isPaused) return; // Pausa a rotação se isPaused for true
     const elapsed = clock.getElapsedTime();
     if (meshRef.current && sunPosition) {
+      //Movimento da órbita dos planetas baseado no centro do Sol
       meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
       meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
+      //condição extra caso o planeta esteja focado, aplicar rotação contínua nos eixos
+      if (isFocused) {
+        meshRef.current.rotation.x += 0.20;  // Ajuste a velocidade da rotação conforme necessário
+        meshRef.current.rotation.y += 0.20;  // Rotação também no eixo Y para maior interatividade
+      }
     }
+
   });
+
 
   return (
     <>
@@ -43,6 +54,7 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
       {isFocused && (
         <OrbitControls
           enablePan={false}
+          enableRotate={true}
           maxPolarAngle={Math.PI * 2}
           minDistance={10}
           maxDistance={50}
@@ -55,6 +67,7 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
 
 // Mercúrio
 function Mercury({ sunPosition, onClick, isPaused, isFocused }) {
+  
   return (
     <Planet
       sunPosition={sunPosition}
@@ -65,6 +78,7 @@ function Mercury({ sunPosition, onClick, isPaused, isFocused }) {
       onClick={onClick}
       isPaused={isPaused}
       isFocused={isFocused}
+      
     />
   );
 }
@@ -119,20 +133,22 @@ function Mars({ sunPosition, onClick, isPaused, isFocused }) {
 
 // Júpiter
 function Jupiter({ sunPosition, onClick, isPaused, isFocused }) {
+  const adjustedScale = isFocused ? [0.15, 0.15, 0.15] : [0.35, 0.35, 0.35]; // Reduz escala quando focado
   return (
     <Planet
       sunPosition={sunPosition}
       modelPath="/Jupiter/scene_jupiter.gltf"
       distance={300}
       speed={0.2}
-      scale={[0.35, 0.35, 0.35]}
+      /* scale={[0.35, 0.35, 0.35]} */
+      scale={adjustedScale} // Use a escala ajustada
       onClick={onClick}
       isPaused={isPaused}
       isFocused={isFocused}
+      
     />
   );
 }
-
 // Saturno
 function Saturn({ sunPosition, onClick, isPaused, isFocused }) {
   return (
