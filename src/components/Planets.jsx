@@ -2,12 +2,9 @@ import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 
-
-
-
 // Sol
 function Sun({ setSunPosition }) {
-  const { scene } = useGLTF('/Sun/scene.gltf');
+  const { scene } = useGLTF("/Sun/scene.gltf");
   const meshRef = useRef();
 
   useFrame(({ clock }) => {
@@ -22,7 +19,17 @@ function Sun({ setSunPosition }) {
 }
 
 // Função genérica para planetas
-function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPaused, isFocused }) {
+function Planet({
+  sunPosition,
+  modelPath,
+  distance,
+  speed,
+  scale,
+  onClick,
+  isPaused,
+  isFocused,
+  orbitOffset = { x: 0, y: 0, z: 0 } // Adiciona o parâmetro para controlar a órbita
+}) {
   const { scene } = useGLTF(modelPath);
   const meshRef = useRef();
 
@@ -31,17 +38,18 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
     const elapsed = clock.getElapsedTime();
     if (meshRef.current && sunPosition) {
       //Movimento da órbita dos planetas baseado no centro do Sol
-      meshRef.current.position.x = sunPosition.x + Math.cos(elapsed * speed) * distance;
-      meshRef.current.position.z = sunPosition.z + Math.sin(elapsed * speed) * distance;
+      meshRef.current.position.x =
+        sunPosition.x + Math.cos(elapsed * speed) * distance + orbitOffset.x;
+        meshRef.current.position.y = sunPosition.y + orbitOffset.y; // Aplica a órbita Y
+      meshRef.current.position.z =
+        sunPosition.z + Math.sin(elapsed * speed) * distance + orbitOffset.z;
       //condição extra caso o planeta esteja focado, aplicar rotação contínua nos eixos
       if (isFocused) {
-        meshRef.current.rotation.x += 0.20;  // Ajuste a velocidade da rotação conforme necessário
-        meshRef.current.rotation.y += 0.20;  // Rotação também no eixo Y para maior interatividade
+        meshRef.current.rotation.x += 0.2; // Ajuste a velocidade da rotação conforme necessário
+        meshRef.current.rotation.y += 0.2; // Rotação também no eixo Y para maior interatividade
       }
     }
-
   });
-
 
   return (
     <>
@@ -53,11 +61,11 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
       />
       {isFocused && (
         <OrbitControls
-          enablePan={false}
-          enableRotate={true}
+          enablePan={true}
+          enableRotate={false}
           maxPolarAngle={Math.PI * 2}
-          minDistance={10}
-          maxDistance={50}
+          minDistance={35} // Ajuste para um valor seguro
+          maxDistance={100} // Ajuste para controlar o máximo de afastamento
           target={meshRef.current.position} // Centraliza o controle no planeta
         />
       )}
@@ -67,7 +75,6 @@ function Planet({ sunPosition, modelPath, distance, speed, scale, onClick, isPau
 
 // Mercúrio
 function Mercury({ sunPosition, onClick, isPaused, isFocused }) {
-  
   return (
     <Planet
       sunPosition={sunPosition}
@@ -78,7 +85,6 @@ function Mercury({ sunPosition, onClick, isPaused, isFocused }) {
       onClick={onClick}
       isPaused={isPaused}
       isFocused={isFocused}
-      
     />
   );
 }
@@ -140,15 +146,14 @@ function Jupiter({ sunPosition, onClick, isPaused, isFocused }) {
       modelPath="/Jupiter/scene_jupiter.gltf"
       distance={300}
       speed={0.2}
-      /* scale={[0.35, 0.35, 0.35]} */
       scale={adjustedScale} // Use a escala ajustada
       onClick={onClick}
       isPaused={isPaused}
       isFocused={isFocused}
-      
     />
   );
 }
+
 // Saturno
 function Saturn({ sunPosition, onClick, isPaused, isFocused }) {
   return (
@@ -161,6 +166,7 @@ function Saturn({ sunPosition, onClick, isPaused, isFocused }) {
       onClick={onClick}
       isPaused={isPaused}
       isFocused={isFocused}
+      orbitOffset={{ x: 50, y:70 ,z: 30 }} // Adiciona a mudança de órbita
     />
   );
 }

@@ -2,6 +2,10 @@ body, html, #root {
   margin: 0;
   height: 100%;
   overflow: hidden;
+  background:url('./assets/astronaut-in-the-ocean.1920x1080.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  
 }
 
 canvas {

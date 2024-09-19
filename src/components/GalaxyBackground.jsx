@@ -10,9 +10,9 @@ const { scene } = useGLTF('/scene_galaxy.gltf');
   // Rotaciona a galáxia lentamente
   useFrame(() => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.0010;
-      meshRef.current.rotation.x -= 0.0009;
-      meshRef.current.rotation.z += 0.0020;
+      meshRef.current.rotation.y += 0.0014;
+      meshRef.current.rotation.x -= 0.0019;
+      meshRef.current.rotation.z += 0.0002;
 
     }
   });

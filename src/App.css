@@ -2,7 +2,7 @@ button{
   position: "absolute";
   top: "20px";
   left: "20px";
-  zIndex: 1;
+  z-Index: 1;
   padding: "10px";
-  fontSize: "16px";
+  font-size: "16px";
 }
